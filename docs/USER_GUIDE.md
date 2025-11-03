@@ -209,29 +209,21 @@ Capture context from any application:
 
 ## Keyboard Shortcuts
 
-### In the Popup
-
 | Key | Action |
 |-----|--------|
 | **Escape** | Close popup |
 | **Enter** | Execute command |
 | **Arrow Keys** | Navigate commands |
 | **/** | Launch first folder matching search |
-| **=** | Edit command from current input |
-| **;** | Edit selected command |
+| **=** | Template: Edit command from current input |
+| **;** | Template: Edit currently selected command |
+| **+** | Template (Grab): Capture window/app after countdown |
+| **>** | Template (Alias): Create alias to last executed command |
+| **!** | Template (Sub Anchor): Create anchor as subfolder of last executed |
+| **&** | Template (Sub Markdown): Create markdown note in same folder as last executed |
 | **`** | Show history viewer |
 | **?** | Show keyboard shortcuts |
-
-### Templates
-
-| Key | Template | Description |
-|-----|----------|-------------|
-| **+** | Grab | Capture window/app after countdown |
-| **;** | Edit Selection | Edit currently selected command |
-| **=** | Edit Input | Edit command from current input |
-| **>** | Alias | Create alias to last executed command |
-| **!** | Sub Anchor | Create anchor as subfolder of last executed |
-| **&** | Sub Markdown | Create markdown note in same folder as last executed |
+| **Cmd+Shift+H** | Open User Guide (HTML documentation) |
 
 ## Creating Commands
 
