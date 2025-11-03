@@ -25,16 +25,34 @@ HookAnchor is a powerful command launcher for macOS that provides instant access
 
 1. **Download HookAnchor**
    - Download the latest `HookAnchor-{version}.dmg` from [releases](https://github.com/oblinger/hookanchor/releases)
-   
+
 2. **Install the Application**
    - Open the DMG file
    - Drag HookAnchor.app to your Applications folder
-   
-3. **First Launch**
-   - Open HookAnchor from Applications
-   - The app will create configuration files in `~/.config/hookanchor/`
-   
-4. **Setup Keyboard Trigger** (choose one method below)
+
+3. **First Launch - Bypass Security Warning**
+   Because HookAnchor is not signed with an Apple Developer certificate, macOS will block it on first launch.
+
+   **If you get "Move to Trash" dialog:**
+   a. Click **Cancel** (do NOT move to trash)
+   b. Open **System Settings** → **Privacy & Security**
+   c. Scroll down to the **Security** section
+   d. You should see: *"HookAnchor.app was blocked from use because it is not from an identified developer"*
+   e. Click **Open Anyway**
+   f. In the confirmation dialog, click **Open**
+
+   **Alternative method:**
+   - Right-click `HookAnchor.app` in Applications folder
+   - Hold **Option** key and select **Open**
+   - Click **Open** in the security dialog
+
+   This security bypass is only needed once. After the first successful launch, HookAnchor opens normally and creates configuration files in `~/.config/hookanchor/`
+
+4. **Launch HookAnchor**: Open HookAnchor from Applications to complete initial setup
+
+5. **Grant Permissions**: Allow accessibility permissions when prompted
+
+6. **Setup Keyboard Trigger** (choose one method below - **Option 1 is recommended**)
 
 ## Setting Up Keyboard Triggers
 
@@ -55,8 +73,12 @@ Use macOS's built-in keyboard shortcut system:
 
 **Recommended shortcuts:**
 - **⌥Space** (Option+Space) - Easy to reach, rarely conflicts
+- **⌥`** (Option+Backtick) - Default trigger in config.yaml
 - **⌃Space** (Control+Space) - If not used by Spotlight
 - **⌘⇧Space** (Command+Shift+Space) - Alternative option
+
+**Testing the trigger:**
+After setting up your shortcut, test it immediately by pressing your chosen key combination. The HookAnchor popup should appear instantly. If not, verify the shortcut was added correctly in System Settings.
 
 ### Option 2: Keyboard Maestro (Power Users)
 
