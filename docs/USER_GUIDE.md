@@ -352,31 +352,61 @@ Edit `~/.config/hookanchor/config.yaml` to add custom functions and templates.
 
 ### Reset Configuration
 
-To start fresh:
+To start fresh with default configuration:
 ```bash
-# Backup current config
-cp ~/.config/hookanchor/config.yaml ~/.config/hookanchor/config.backup.yaml
-
-# Remove config (will regenerate defaults)
-rm ~/.config/hookanchor/config.yaml
-
-# Restart HookAnchor
+# Backup current config, then remove it to regenerate defaults
+cp ~/.config/hookanchor/config.yaml ~/.config/hookanchor/config.backup.yaml && rm ~/.config/hookanchor/config.yaml
+# Restart HookAnchor to load defaults
 ```
+
+### Restore from Backup
+
+To restore commands from a previous backup:
+```bash
+# Copy an earlier version of commands.txt from backups folder
+# This will load previous commands over the existing commands
+cp ~/.config/hookanchor/backups/commands_YYYYMMDD_HHMMSS.txt ~/.config/hookanchor/commands.txt
+
+# Or restore the cache file to replace current commands with earlier version
+cp ~/.config/hookanchor/backups/cache_YYYYMMDD_HHMMSS.json ~/.config/hookanchor/commands_cache.json
+```
+
+Both files in the backups folder use matching timestamps, so you can restore both from the same point in time.
 
 ## Getting Help
 
-- **Configuration**: See [CONFIG_REFERENCE.md](CONFIG_REFERENCE.md)
-- **Templates**: See [TEMPLATES_AND_SCRIPTING.md](TEMPLATES_AND_SCRIPTING.md)
-- **Issues**: Report at https://github.com/oblinger/hookanchor/issues
+Use the CLI help system for detailed information:
+
+```bash
+ha --help              # General help and command overview
+ha --help-config       # Configuration reference
+ha --help-templates    # Templates and scripting guide
+```
+
+Additional resources:
 - **Logs**: Check `~/.config/hookanchor/anchor.log` for debugging
+- **Issues**: Report bugs at https://github.com/oblinger/hookanchor/issues
 
-## Quick Command Reference
+## Action Reference
 
-| Want to... | Command Type | Example |
-|------------|--------------|---------|
-| Open an app | `app` | `Terminal : app Terminal` |
-| Open a website | `url` | `GitHub : url https://github.com` |
-| Open a folder | `folder` | `Downloads : folder ~/Downloads` |
-| Run a shell command | `cmd` | `List : cmd ls -la` |
-| Create a project bookmark | `anchor` | `Project : anchor ~/Project/Project.md` |
-| Create a shortcut | `alias` | `GH : alias GitHub` |
+Action types specify what kind of command to execute. These are used in command definitions to tell HookAnchor how to handle the command.
+
+| Action Type | Description | Example |
+|-------------|-------------|---------|
+| `app` | Launch macOS applications | `Terminal : app Terminal` |
+| `url` | Open websites in default browser | `GitHub : url https://github.com` |
+| `folder` | Open folders in Finder | `Downloads : folder ~/Downloads` |
+| `cmd` | Execute shell commands | `List : cmd ls -la` |
+| `anchor` | Navigate to project folders with markdown files | `Project : anchor ~/Project/Project.md` |
+| `alias` | Reference other commands | `GH : alias GitHub` |
+| `markdown` | Open markdown files in Obsidian | `Notes : markdown ~/Documents/notes.md` |
+| `doc` | Open document files (Word, Excel, etc.) | `Report : doc ~/Documents/report.docx` |
+| `chrome` | Open URL in Chrome | `Gmail : chrome https://mail.google.com` |
+| `safari` | Open URL in Safari | `News : safari https://news.ycombinator.com` |
+| `brave` | Open URL in Brave browser | `Web3 : brave https://ethereum.org` |
+| `notion` | Open Notion pages | `Tasks : notion https://notion.so/tasks` |
+| `slack` | Open Slack channels | `Team : slack https://team.slack.com/archives/...` |
+| `contact` | Open contact cards | `John : contact john@example.com` |
+| `text` | Open text files | `Todo : text ~/Documents/todo.txt` |
+| `console` | Open Google Cloud Console | `GCP : console https://console.cloud.google.com` |
+| `obs_url` | Open Obsidian URLs | `Daily : obs_url obsidian://open?vault=MyVault` |
