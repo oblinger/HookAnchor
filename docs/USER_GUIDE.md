@@ -73,7 +73,7 @@ Use macOS's built-in keyboard shortcut system:
 
 **Recommended shortcuts:**
 - **⌥Space** (Option+Space) - Easy to reach, rarely conflicts
-- **⌥`** (Option+Backtick) - Default trigger in config.yaml
+- **⌥`** (Option+Backtick) - Good alternative if Option+Space is taken
 - **⌃Space** (Control+Space) - If not used by Spotlight
 - **⌘⇧Space** (Command+Shift+Space) - Alternative option
 
@@ -133,7 +133,7 @@ Once you've set up your keyboard trigger, press your chosen key combination to o
 
 ### Searching Commands
 
-1. Press Caps Lock to open HookAnchor
+1. Press your configured trigger key to open HookAnchor
 2. Start typing part of a command name
 3. Matching commands appear instantly
 4. Use arrow keys to select
@@ -198,46 +198,14 @@ Capture context from any application:
 
 ## Command Types
 
-### Applications (`app`)
-Launch macOS applications:
-```
-Terminal : app Terminal
-Chrome : app Google Chrome
-```
-
-### URLs (`url`)
-Open websites in your default browser:
-```
-GitHub : url https://github.com
-Google : url https://google.com
-```
-
-### Folders (`folder`)
-Open folders in Finder:
-```
-Downloads : folder ~/Downloads
-Projects : folder ~/Documents/Projects
-```
-
-### Shell Commands (`cmd`)
-Execute shell commands:
-```
-List Files : cmd ls -la
-Server : cmd npm run dev
-```
-
-### Anchors (`anchor`)
-Navigate to project folders with associated markdown files:
-```
-My Project : anchor ~/Projects/MyProject/MyProject.md
-```
-
-### Aliases (`alias`)
-Reference other commands:
-```
-Term : alias Terminal
-GH : alias GitHub
-```
+| Type | Description | Example |
+|------|-------------|---------|
+| **app** | Launch macOS applications | `Terminal : app Terminal`<br>`Chrome : app Google Chrome` |
+| **url** | Open websites in default browser | `GitHub : url https://github.com`<br>`Google : url https://google.com` |
+| **folder** | Open folders in Finder | `Downloads : folder ~/Downloads`<br>`Projects : folder ~/Documents/Projects` |
+| **cmd** | Execute shell commands | `List Files : cmd ls -la`<br>`Server : cmd npm run dev` |
+| **anchor** | Navigate to project folders with markdown files | `My Project : anchor ~/Projects/MyProject/MyProject.md` |
+| **alias** | Reference other commands | `Term : alias Terminal`<br>`GH : alias GitHub` |
 
 ## Keyboard Shortcuts
 
@@ -248,27 +216,28 @@ GH : alias GitHub
 | **Escape** | Close popup |
 | **Enter** | Execute command |
 | **Arrow Keys** | Navigate commands |
-| **/** | Open folder of selected command |
-| **=** | Open command editor |
+| **/** | Launch first folder matching search |
+| **=** | Edit command from current input |
 | **;** | Edit selected command |
-| **`** | Force rescan |
-| **?** | Show keyboard help |
-| **Delete** | Remove command |
+| **`** | Show history viewer |
+| **?** | Show keyboard shortcuts |
 
 ### Templates
 
 | Key | Template | Description |
 |-----|----------|-------------|
-| **%** | Default | Create new anchor |
-| **$** | Note | Create dated note |
-| **+** | Grab | Capture application |
-| **>** | Alias | Create alias |
+| **+** | Grab | Capture window/app after countdown |
+| **;** | Edit Selection | Edit currently selected command |
+| **=** | Edit Input | Edit command from current input |
+| **>** | Alias | Create alias to last executed command |
+| **!** | Sub Anchor | Create anchor as subfolder of last executed |
+| **&** | Sub Markdown | Create markdown note in same folder as last executed |
 
 ## Creating Commands
 
 ### Method 1: Using Templates
 
-1. Open HookAnchor (Caps Lock)
+1. Open HookAnchor (your configured trigger key)
 2. Press a template key (e.g., `%` for anchor)
 3. Enter the command name
 4. Edit details if needed
@@ -290,7 +259,7 @@ Create commands in markdown files within your configured `markdown_roots`:
 ```markdown
 # My Commands
 
-Terminal : cmd open -a Terminal
+Terminal : app Terminal
 Chrome : app Google Chrome
 GitHub : url https://github.com
 ```
