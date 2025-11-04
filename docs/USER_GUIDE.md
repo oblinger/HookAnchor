@@ -58,27 +58,43 @@ HookAnchor is a powerful command launcher for macOS that provides instant access
 
 You can trigger HookAnchor using any of these methods:
 
-### Option 1: macOS Native Keyboard Shortcuts (Simplest)
+### Option 1: Built-in Global Hotkey (Simplest - No Setup Required!)
 
-Use macOS's built-in keyboard shortcut system:
+**HookAnchor includes a native global hotkey system that works out of the box!**
 
-1. **Open System Settings** → **Keyboard** → **Keyboard Shortcuts**
-2. Select **App Shortcuts** in the left sidebar
-3. Click the **+** button to add a new shortcut
-4. Configure as follows:
-   - **Application**: Select "HookAnchor" (navigate to /Applications)
-   - **Menu Title**: Leave blank or type "Show"
-   - **Keyboard Shortcut**: Press your desired key combo (e.g., ⌥Space for Option+Space)
-5. Click **Add**
+By default, HookAnchor uses **Option+Space** (⌥Space) to show the popup from any application.
 
-**Recommended shortcuts:**
-- **⌥Space** (Option+Space) - Easy to reach, rarely conflicts
-- **⌥`** (Option+Backtick) - Good alternative if Option+Space is taken
-- **⌃Space** (Control+Space) - If not used by Spotlight
-- **⌘⇧Space** (Command+Shift+Space) - Alternative option
+**To change the hotkey:**
 
-**Testing the trigger:**
-After setting up your shortcut, test it immediately by pressing your chosen key combination. The HookAnchor popup should appear instantly. If not, verify the shortcut was added correctly in System Settings.
+1. Open the configuration file:
+   ```bash
+   open ~/.config/hookanchor/config.yaml
+   ```
+
+2. Find the `global_hotkey` line (around line 21):
+   ```yaml
+   global_hotkey: "Option+Space"
+   ```
+
+3. Change it to your preferred key combination:
+   ```yaml
+   global_hotkey: "Option+`"          # Option+Backtick
+   global_hotkey: "Command+Shift+Space"  # Cmd+Shift+Space
+   global_hotkey: "Control+Space"     # Control+Space
+   ```
+
+4. Save the file and restart HookAnchor
+
+**Supported keys:**
+- **Modifiers**: Option, Command, Control, Shift
+- **Keys**: Space, Return, Enter, `, Backtick
+- **Format**: Use `+` to combine (e.g., "Option+Space", "Command+Shift+Return")
+
+**Advantages:**
+- ✅ Works from **any application** system-wide
+- ✅ No third-party software needed
+- ✅ No system settings to configure
+- ✅ Just works!
 
 ### Option 2: Keyboard Maestro (Power Users)
 
