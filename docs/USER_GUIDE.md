@@ -30,27 +30,33 @@ HookAnchor is a powerful command launcher for macOS that provides instant access
    - Open the DMG file
    - Drag HookAnchor.app to your Applications folder
 
-3. **First Launch - Bypass Security Warning**
-   Because HookAnchor is not signed with an Apple Developer certificate, macOS will block it on first launch.
+3. **First Launch - Bypass macOS Security**
 
-   **If you get "Move to Trash" dialog:**
-   a. Click **Cancel** (do NOT move to trash)
-   b. Open **System Settings** → **Privacy & Security**
-   c. Scroll down to the **Security** section
-   d. You should see: *"HookAnchor.app was blocked from use because it is not from an identified developer"*
-   e. Click **Open Anyway**
-   f. In the confirmation dialog, click **Open**
+   Because HookAnchor is not signed with an Apple Developer certificate, macOS will block it on first launch. Follow these steps:
 
-   **Alternative method:**
-   - Right-click `HookAnchor.app` in Applications folder
-   - Hold **Option** key and select **Open**
-   - Click **Open** in the security dialog
+   a. **Try to open** HookAnchor.app from Applications (double-click)
+      - You'll see: "HookAnchor cannot be opened" with "Move to Trash" option
+      - Click **"Done"** or **"Cancel"**
 
-   This security bypass is only needed once. After the first successful launch, HookAnchor opens normally and creates configuration files in `~/.config/hookanchor/`
+   b. **Open System Settings**:
+      - Go to **System Settings** (or System Preferences)
+      - Select **Privacy & Security**
+      - Scroll down to the **Security** section
+      - You should see: *"HookAnchor.app was blocked from use because it is not from an identified developer"*
 
-4. **Launch HookAnchor**: Open HookAnchor from Applications to complete initial setup
+   c. **Approve the app**:
+      - Click **"Open Anyway"**
+      - Try opening HookAnchor.app again
+      - In the new dialog, click **"Open"**
 
-5. **Grant Permissions**: Allow accessibility permissions when prompted
+   **Important Notes:**
+   - The "Open Anyway" button only appears briefly after you try to open the app
+   - If you don't see it, try opening HookAnchor.app again, then immediately check System Settings
+   - This security bypass is only needed **once** - after that, the app opens normally
+
+4. **Grant Permissions**: Allow accessibility permissions when prompted
+
+5. **You're Done!**: Press **Option+Space** (⌥Space) from anywhere to open HookAnchor
 
 6. **Setup Keyboard Trigger** (choose one method below - **Option 1 is recommended**)
 
