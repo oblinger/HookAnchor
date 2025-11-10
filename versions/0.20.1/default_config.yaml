@@ -1,0 +1,773 @@
+config_version: "0.20.6"
+
+# HookAnchor Default Configuration
+# 
+# This config has a number of example templates.  Please customize as needed.
+#
+# UNIFIED ACTIONS SYSTEM:
+# All behaviors (templates, keyboard bindings, command actions) are now defined
+# in the 'actions:' section. Each action has a 'type' that determines its behavior,
+# and can optionally be bound to a keyboard key via the 'key' field.
+
+# Anchor Selector Configuration
+# Main configuration file for both popup app and launcher system
+
+
+
+# =================================================================
+# APPLICATION SETTINGS
+# =================================================================
+popup_settings:
+  verbose_logging:        false        # Controls if detailed logging messages added to the log
+  merge_similar:          true         # Merging similar commands in popup
+  max_rows:               25           # Max number of rows in the list of matching commands
+  max_columns:            4            # Max columns in list of matching commands
+  max_characters:         30           # Maximum characters for command names before truncation
+  word_separators:        " ._-!"      # Word separator chars for submenus and command merging
+  scan_interval_seconds:  600          # How many seconds between automatic rescanning of the filesystem
+  idle_timeout_seconds:   60           # Hide popup after this many seconds of inactivity
+  countdown_seconds:      5            # Seconds for grabber countdown (default: 5)
+  anchor_timeout_seconds: 3600         # Seconds to remember last executed anchor
+  run_in_background:      true         # Keep app running in background for instant popup
+  show_popup_on_startup:  false        # Show popup window when app launches (false = run silently in background)
+  global_hotkey:          "Option+Space"  # Global hotkey to show popup (e.g., "Option+Space", "Command+Shift+Space", "Option+`")
+  popup_server_retries:   3            # Number of times to retry showing the popup before rebuilding
+  max_window_size:        "1700x1100"  # Maximum size for dialogs and popups in "widthxheight" format
+  default_window_size:    "600x120"    # Default popup window size in "widthxheight" format
+  max_log_file_size:      10000000     # Maximum log file size in bytes (10MB) before clearing
+  file_roots:             ["~/Documents/Notes", "/Applications"] # List of file scanning roots (markdown files and apps)
+  doc_file_extensions:    "pdf,doc,docx,xls,xlsx,ppt,pptx,txt,rtf,pages,numbers,csv,html,htm" # File extensions to auto-create DOC commands for
+  display_file_extensions: "pdf,doc,docx,xls,xlsx,ppt,pptx,txt,rtf,pages,numbers,csv,html,htm,md" # File extensions to display in prefix menu file lists
+
+  skip_patterns:                       # Standard glob patterns to skip during scanning
+    - "**/.*/**"                       # Exclude all hidden folders (starting with dot)
+    - "**/Yore/**"                     # Exclude any path containing /Yore/ folder (historical files)
+    - "**/*backups*/**"                # Exclude all backup directories and their contents
+    - "~/Documents/Notes/_temp_links/**"        # Exclude temporary symlink directory tree
+    - "~/Documents/Notes/prj/binproj/Hook Anchor/code/config/commands.txt"
+    - "~/Documents/Notes/T/Career/NJ/AI Job Search/outputs/**"  # Exclude AI job search output directory tree
+    - "**/_history/**"                 # Exclude all _history directories
+    - "**/capture_*.xlsx"              # Exclude capture Excel files anywhere
+    - "**/~$*.xlsx"                    # Exclude Excel temporary files anywhere
+    - "**/CLAUDE.md"                   # Exclude all CLAUDE.md files
+    - "**/README.md"                   # Exclude all README.md files
+  listed_actions: >
+    alias,app,console,doc,folder,insert,markdown,text,tmux,
+    1pass,contact,notion,obs_url,slack,
+    url,brave,chrome,firefox,safari,work
+  
+  # Rename associated data when editing command names
+  rename_doc:             true         # Rename document files when command name changes
+  rename_folder:          true         # Rename anchor folders when command name changes
+  rename_patch:           true         # Update patch names and commands when patch is renamed
+  rename_prefix:          true         # Update command prefixes when prefix command is renamed
+  preferred_anchor:       "markdown"   # Preferred action type when multiple anchors exist for same patch
+
+  # Developer mode - controls build verification behavior
+  # Options:
+  #   "true"  - Always enable developer mode (build verification active)
+  #   "false" - Always disable developer mode (skip build verification)
+  #   "hostname" - Enable only on machines matching this hostname (e.g., "your-hostname.local")
+  developer_mode: ""      # Set to your hostname for dev-only features  # Current dev machine
+
+  # Cloud document scanning configuration (Phase 1: Logging only)
+  cloud_scan_roots:
+    - type:               notion
+      limit:              0            # Number of pages to scan (0 = disabled, max recommended: 100)
+      incremental:        false        # Only scan changed pages since last scan (default: false)
+      root:               ""           # Leave empty to scan all accessible pages, or specify page/workspace ID
+      api_key: ""      # Or paste key directly (starts with secret_ or ntn_)      # Or paste key directly (starts with secret_)
+
+
+# =================================================================
+# TEMPLATE SETTINGS
+# =================================================================
+template_settings:
+  default_anchor_template:     "sub_markdown"  # Template to use when active anchor exists but no template found in hierarchy
+  default_no_anchor_template:  "sub_markdown"  # Template to use when no active anchor is set
+
+launcher_settings:
+  js_timeout_ms:          5000         # Max milliseconds allows for a js command execution
+  obsidian_app_name:      "Obsidian"   # Obisidian app name
+  obsidian_vault_name:    "MyVault"        # Main vault used for Obsidian viewing of markdown files
+  obsidian_vault_path:    "~/Documents/Notes"   # Location of the main vault
+  use_javascript_tmux_activation: "true"   # Use JavaScript TMUX implementation
+  tmux_startup_command:   "claude --continue --dangerously-skip-permissions"  # Command to run in tmux session after activation
+
+
+# =================================================================
+# HISTORY VIEWER SETTINGS
+# =================================================================
+# Settings specific to the history viewer GUI
+
+history_viewer:
+  # Display settings
+  viewable_history_limit: 50000      # Max history entries to load
+  tree_sidebar_width: 250            # Tree sidebar width in pixels
+  tree_sidebar_min_width: 50         # Minimum sidebar width in pixels
+  tree_indent_pixels: 10             # Indent per tree level in pixels
+  tree_show_guides: true             # Show tree indent guide lines
+  peek_on_hover: true                # Show history on hover
+
+  # Keyboard shortcuts
+  key_bindings:
+    edit_selection: ";"              # Key to edit the selected command in history viewer
+
+
+# =================================================================
+# UNIFIED ACTIONS SYSTEM
+# =================================================================
+# All behaviors (templates, keyboard actions, command actions) are defined as an action here.
+# Each action has a 'type' that determines its behavior, and can optionally
+# be bound to a keyboard key via the 'key' field.  (See configuration reference for available commands.)
+actions:
+
+  # =================================================================
+  # TEMPLATE ACTIONS - For creating new commands & files
+  # =================================================================
+
+  child_year_folder:
+    description: "Creates a new subfolder with a YYYY prefix"
+    action_type: template
+    name: "{{date.year}} {{input}}"
+    action: "markdown"
+    arg: "{{last_executed.folder}}/{{date.year}} {{input}}/{{date.year}} {{input}}.md"
+    flags: "A"
+    edit: true
+    file: "{{last_executed.folder}}/{{date.year}} {{input}}/{{date.year}} {{input}}.md"
+    file_rescan: true
+    contents: |
+      .[[{{date.year}} {{input}}]].
+      
+
+  prj_child:
+    description: "Creates a new Prj project with a YYYY prefix"
+    action_type: template
+    key: "Cmd+P"
+    name: "{{date.year}} {{input}}"
+    action: "markdown"
+    arg: "~/Documents/Notes/prj/{{date.year}} {{input}}/{{date.year}} {{input}}.md"
+    patch: "Prj"
+    flags: "A"
+    edit: true
+    file: "~/Documents/Notes/prj/{{date.year}} {{input}}/{{date.year}} {{input}}.md"
+    file_rescan: true
+    contents: |
+      .[[{{date.year}}-{{date.month}} {{input}}]].
+      
+
+  child_at_entry:
+    description: "Creates a new contact's @ entry"
+    action_type: template
+    key: "Cmd+Shift+A"
+    name: "@{{input}}"
+    action: "markdown"
+    arg: "~/Documents/Notes/At/@{{input}}.md"
+    patch: "At"
+    flags: ""
+    edit: true
+    file_rescan: true
+    contents: |
+      =[[At]]  
+
+    
+  child_corp_entry:
+    description: "Creates a new org @ entry"
+    action_type: template
+    key: "Cmd+O"
+    name: "@{{input}}"
+    action: "markdown"
+    arg: "~/Documents/Notes/At/Corp/@{{input}}.md"
+    patch: "Corp"
+    flags: ""
+    edit: true
+    file: "~/Documents/Notes/At/Corp/@{{input}}.md"
+    file_rescan: true
+    contents: |
+      =[[Corp]]   
+
+    
+  child_doc_entry:
+    description: "Creates a new DOC documentation file"
+    action_type: template
+    key: "Cmd+D"
+    name: "Doc{{input}}"
+    action: "doc"
+    arg: "~/Documents/Notes/T/DOC/Doc{{input}}.md"
+    patch: "DOC"
+    flags: ""
+    edit: true
+    file_rescan: true
+    file: "~/Documents/Notes/T/DOC/Doc{{input}}.md"
+    contents: |
+      #org   
+      
+
+
+  # =================================================================
+  # TEMPLATE ACTIONS - For creating new commands & files
+  # =================================================================
+
+  kb_create_child:
+    description: "Create child command using anchor's template"
+    action_type: popup
+    key: "+"
+    popup_action: create_child
+    close_popup: false
+
+  grab:
+    description: "Capture window/app after 3 second countdown"
+    action_type: template
+    key: "*"
+    grab: 5
+    name: "{{input}}"
+    action: "{{grabbed.action}}"
+    arg: "{{grabbed.arg}}"
+    edit: true
+
+  edit_selection:
+    description: "Edit currently selected command"
+    action_type: template
+    key: ";"
+    name: "{{selected.name}}"
+    action: "{{selected.action}}"
+    arg: "{{selected.arg}}"
+    patch: "{{selected.patch}}"
+    flags: "{{selected.flags}}"
+    edit: true
+    use_existing: true
+
+  edit_input:
+    description: "Edit command from current input"
+    action_type: template
+    key: "="
+    name: "{{raw_input}}"
+    action: ""
+    arg: ""
+    edit: true
+    use_existing: true
+    
+
+  create_alias:
+    description: "Create alias to last executed command"
+    action_type: template
+    key: ">"
+    name: "{{input}}"
+    action: "alias"
+    arg: "{{last_executed.name}}"
+    patch: ""
+    flags: ""
+    edit: true
+    
+
+  create_sub_anchor:
+    description: "Creates an anchor as subfolder of last executed command's folder"
+    action_type: template
+    key: "!"
+    name: "{{input}}"
+    action: "markdown"
+    arg: "{{last_executed.folder}}/{{input}}/{{input}}.md"
+    patch: "{{last_executed.name}}"
+    flags: "A"
+    edit: true
+    file: "{{last_executed.folder}}/{{input}}/{{input}}.md"
+    validate_last_executed_folder: true
+    contents: |
+      .[[{{input}}]].  >[[{{last_executed.name}}]]
+     
+
+  sub_markdown:
+    description: "Creates a markdown note in the same folder as the last executed command"
+    action_type: template
+    key: "&"
+    name: "{{input}}"
+    action: "markdown"
+    arg: "{{last_executed.folder}}/{{input}}.md"
+    patch: "{{last_executed.patch}}"
+    flags: ""
+    edit: true
+    file: "{{last_executed.folder}}/{{input}}.md"
+    validate_last_executed_folder: true
+       
+
+  year:
+    description: "Creates an anchor and subfolder with a YYYY-MM-DD prefix"
+    action_type: template
+    key: "Cmd+Y"
+    name: "{{date.year}}-{{date.month}}-{{date.day}} {{input}}"
+    action: "markdown"
+    arg: "{{last_executed.folder}}/{{date.year}}-{{date.month}}-{{date.day}} {{input}}.md"
+    patch: "{{last_executed.patch}}"
+    flags: "A"
+    edit: true
+    file: "{{last_executed.folder}}/{{date.year}}-{{date.month}}-{{date.day}} {{input}}.md"
+    file_rescan: true
+    contents: ""
+             
+
+
+  # =================================================================
+  # POPUP KEYBOARD ACTIONS - Keyboard shortcuts for popup control
+  # =================================================================
+   
+  kb_show_history_viewer:
+    description: "Show history viewer"
+    action_type: popup
+    key: "`"
+    popup_action: show_history_viewer
+    close_popup: true
+
+  kb_activate_anchor:
+    description: "Activate anchor from input text"
+    action_type: popup
+    key: ","
+    popup_action: activate_anchor
+    close_popup: false
+
+  kb_navigate_up_hierarchy:
+    description: "Navigate up to parent patch in hierarchy"
+    action_type: popup
+    key: "\\"
+    popup_action: navigate_up_hierarchy
+    close_popup: false
+
+  kb_navigate_up_hierarchy_bracket:
+    description: "Navigate up to parent patch in hierarchy (left bracket)"
+    action_type: popup
+    key: "["
+    popup_action: navigate_up_hierarchy
+    close_popup: false
+
+  kb_navigate_down_hierarchy:
+    description: "Navigate down into selected anchor submenu"
+    action_type: popup
+    key: "]"
+    popup_action: navigate_down_hierarchy
+    close_popup: false
+
+  kb_show_folder:
+    description: "Launch first folder matching search"
+    action_type: popup
+    key: "/"
+    popup_action: show_folder
+    close_popup: true
+  
+  kb_show_keys:
+    description: "Show keyboard shortcuts"
+    action_type: popup
+    key: "?"
+    popup_action: show_keys
+    close_popup: false
+
+  kb_open_user_guide:
+    description: "Open User Guide (HTML documentation)"
+    action_type: cmd
+    key: "Cmd+/"
+    arg: "open /Applications/HookAnchor.app/Contents/Resources/USER_GUIDE.html"
+    close_popup: false
+  
+  kb_execute:
+    description: "Execute selected command"
+    action_type: popup
+    key: "enter"
+    popup_action: execute_command
+    close_popup: true
+    
+  kb_exit_app:
+    description: "Close the popup"
+    action_type: popup
+    key: "escape"
+    popup_action: exit
+    close_popup: true
+    
+  kb_navigate_down:
+    description: "Move selection down"
+    action_type: popup
+    key: "arrowdown"
+    popup_action: navigate
+    dx: 0
+    dy: 1
+    close_popup: false
+
+  kb_navigate_up:
+    description: "Move selection up"
+    action_type: popup
+    key: "arrowup"
+    popup_action: navigate
+    dx: 0
+    dy: -1
+    close_popup: false
+    
+  kb_navigate_left:
+    description: "Move selection left (multi-column)"
+    action_type: popup
+    key: "arrowleft"
+    popup_action: navigate
+    dx: -1
+    dy: 0
+    close_popup: false
+    
+  kb_navigate_right:
+    description: "Move selection right (multi-column)"
+    action_type: popup
+    key: "arrowright"
+    popup_action: navigate
+    dx: 1
+    dy: 0
+    close_popup: false
+
+  kb_force_rebuild:
+    description: "Force rebuild: restart server + rescan"
+    action_type: popup
+    key: "Cmd+B"
+    popup_action: force_rebuild
+    close_popup: false
+
+  clear_log:
+    description: "Clear anchor.log file for debugging"
+    action_type: clear_log
+    key: "Cmd+E"
+
+  kb_toggle_show_files:
+    description: "Toggle showing files in prefix menus"
+    action_type: popup
+    key: "Cmd+F"
+    popup_action: toggle_show_files
+    close_popup: false
+
+  kb_tmux:
+    description: "Activate TMUX session for selected folder/anchor"
+    action_type: popup
+    key: "Cmd+T"
+    popup_action: tmux
+    close_popup: true
+
+  # JavaScript TMUX activation - Alternative version for testing
+  activate_tmux_js:
+    description: "Activate TMUX session for selected anchor (JavaScript version)"
+    action_type: activate_tmux
+
+  # Test JavaScript error reporting
+  test_js_error:
+    description: "Test JavaScript error reporting"
+    action_type: test_error
+
+  # Test available JavaScript builtins
+  test_builtins:
+    description: "Test available JavaScript builtins"
+    action_type: test_builtins
+ 
+  show_contact:
+    description: "Show contact for selected command (strips @ prefix)"
+    action_type: popup
+    key: "Cmd+Shift+2"
+    popup_action: show_contact
+    search: "{{command}}"
+    close_popup: true
+
+    
+
+  # =================================================================
+  # COMMAND ACTIONS - Actions used by commands in commands.txt
+  # =================================================================
+  # These define how specific command actions work.
+  # Commands reference these by name in their action field.
+  
+  # Browser actions
+  chrome:
+    description: "Open URL in Google Chrome"
+    action_type: open_url
+    arg_type: url
+    browser: "Google Chrome"
+    url: "{{arg}}"
+
+  safari:
+    description: "Open URL in Safari"
+    action_type: "open_url"
+    arg_type: url
+    browser: "Safari"
+    url: "{{arg}}"
+
+  brave:
+    description: "Open URL in Brave Browser"
+    action_type: open_url
+    arg_type: url
+    browser: "Brave Browser"
+    url: "{{arg}}"
+
+  firefox:
+    description: "Open URL in Firefox"
+    action_type: open_url
+    arg_type: url
+    browser: "Firefox"
+    url: "{{arg}}"
+
+  work:
+    description: "Open URL in work browser (Chrome Beta)"
+    action_type: open_url
+    arg_type: url
+    browser: "Google Chrome Beta"
+    url: "{{arg}}"
+    
+  # Application actions
+  notion:
+    description: "Open Notion page"
+    action_type: notion
+    arg_type: url
+    arg: "{{arg}}"
+
+  obs_url:
+    description: "Open Obsidian URL"
+    action_type: app
+    arg_type: url
+    app: "Obsidian"
+    arg: "{{arg}}"
+
+  contact:
+    description: "Search for contact in Contacts app"
+    action_type: contact
+
+  # Generic actions
+  app:
+    description: "Launch application by name"
+    action_type: app
+    app: "{{arg}}"
+
+  url:
+    description: "Open URL in default browser"
+    action_type: open_url
+    arg_type: url
+    url: "{{arg}}"
+
+  doc:
+    description: "Open document with default application"
+    action_type: doc
+    arg_type: file
+
+  console:
+    description: "Execute command in terminal window"
+    action_type: console
+
+  # Specialized actions (complex logic implemented in JavaScript)
+  folder:
+    description: "Open folder - handles relative and absolute paths"
+    action_type: folder
+    arg_type: folder
+
+  cmd:
+    description: "Execute command - handles windowed (W flag) execution"
+    action_type: cmd
+
+  markdown:
+    description: "Open markdown file in Obsidian or default editor"
+    action_type: markdown
+    arg_type: file
+
+  text:
+    description: "Type text file contents into active application"
+    action_type: text
+    arg_type: file
+    # delay: 1.0  # Optional: seconds to wait before typing (default: 1.0)
+
+  1pass:
+    description: "Search and fill from 1Password"
+    action_type: 1pass
+
+  slack:
+    description: "Navigate to Slack channel"
+    action_type: slack
+
+  rescan:
+    description: "Force rescan of markdown files"
+    action_type: rescan
+
+  tmux:
+    description: "Activate TMUX session for selected anchor"
+    action_type: activate_tmux
+    arg_type: folder
+
+  # Alias action (special case - references other commands)
+  alias:
+    action_type: alias
+    description: "Create alias to another command"
+    target: "{{arg}}"
+
+
+
+# =================================================================
+# GRABBER RULES
+# =================================================================
+# Rules for capturing application context and creating new commands
+
+grabber_rules:
+- {"name": "Chrome URL", "action": "chrome", "group": "Web",
+  "matcher": "bundleId === 'com.google.Chrome' && props.url ? props.url : null"}
+- name: Safari URL
+  matcher: 'bundleId === ''com.apple.Safari'' && props.url ? props.url : null'
+  action: safari
+  group: Web
+- name: Brave URL
+  matcher: 'bundleId === ''com.brave.Browser'' && props.url ? props.url : null'
+  action: brave
+  group: Web
+- name: Firefox URL
+  matcher: 'bundleId === ''org.mozilla.firefox'' && props.url ? props.url : null'
+  action: firefox
+  group: Web
+- name: Chrome Beta URL
+  matcher: 'bundleId === ''com.google.Chrome.beta'' && props.url ? props.url : null'
+  action: work
+  group: Work
+- name: Finder Anchor
+  matcher: 'bundleId === ''com.apple.finder'' && props.selection && props.recommendedAction === ''anchor'' ? props.selection
+    : null'
+  action: tmux
+  group: Files
+- name: Finder Markdown
+  matcher: 'bundleId === ''com.apple.finder'' && props.selection && props.recommendedAction === ''markdown'' ? props.selection
+    : null'
+  action: markdown
+  group: Files
+- name: Finder Selected Folder
+  matcher: 'bundleId === ''com.apple.finder'' && props.selection && props.recommendedAction === ''folder'' ? props.selection
+    : null'
+  action: folder
+  group: Dir
+- name: Finder Selected File
+  matcher: 'bundleId === ''com.apple.finder'' && props.selection && props.recommendedAction !== ''folder'' ? props.selection
+    : null'
+  action: doc
+  group: Doc
+- name: Finder Path
+  matcher: 'bundleId === ''com.apple.finder'' && !props.selection && props.path ? props.path : null'
+  action: folder
+  group: Dir
+- name: VS Code File
+  matcher: 'bundleId === ''com.microsoft.VSCode'' && title && !title.includes(''Welcome'') ? title.split('' — '')[0] : null'
+  action: doc
+  group: Code
+- name: Xcode Project
+  matcher: 'bundleId === ''com.apple.dt.Xcode'' && title ? title.split('' — '')[0] : null'
+  action: doc
+  group: Code
+- name: Sublime Text File
+  matcher: 'bundleId === ''com.sublimetext.4'' && title && title !== ''Sublime Text'' ? title.split('' • '')[0] : null'
+  action: doc
+  group: Code
+- name: TextEdit Document
+  matcher: 'bundleId === ''com.apple.TextEdit'' && title && title !== ''TextEdit'' ? title : null'
+  action: doc
+  group: Documents
+- name: Obsidian Note
+  matcher: 'bundleId === ''md.obsidian'' && props.url ? props.url : null'
+  action: obs_url
+  group: Notes
+- name: Notion Page
+  matcher: 'bundleId === ''notion.id'' ? (props.url || "") : null'
+  action: notion
+  group: Notes
+- name: Bear Note
+  matcher: 'bundleId === ''net.shinyfrog.bear'' && title && title !== ''Bear'' ? title : null'
+  action: doc
+  group: Notes
+- name: 1Password Item
+  matcher: 'bundleId.includes(''1password'') && title && !title.includes(''1Password'') ? title.split('' — '')[0] : null'
+  action: 1pass
+  group: Security
+- name: Terminal Session
+  matcher: 'bundleId === ''com.apple.Terminal'' && title && title !== ''Terminal'' ? title : null'
+  action: cmd
+  group: Terminal
+- name: iTerm2 Session
+  matcher: 'bundleId === ''com.googlecode.iterm2'' && title ? title.split('' — '')[0] : null'
+  action: cmd
+  group: Terminal
+- name: Tmux Session
+  matcher: 'title && title.includes(''tmux'') ? title.match(/tmux\[(\w+)\]/)?.[1] : null'
+  action: cmd
+  group: Terminal
+- name: Slack Channel
+  matcher: 'bundleId === ''com.tinyspeck.slackmacgap'' && props.channel ? props.channel : null'
+  action: slack
+  group: Slack
+- name: Discord Server
+  matcher: 'bundleId === ''com.hnc.Discord'' && title && !title.includes(''Discord'') ? title : null'
+  action: app
+  group: Communication
+- name: Zoom Meeting
+  matcher: 'bundleId === ''us.zoom.xos'' && title && title.includes(''Zoom Meeting'') ? ''Zoom Meeting'' : null'
+  action: app
+  group: Meetings
+- name: Photoshop Document
+  matcher: 'bundleId === ''com.adobe.Photoshop'' && title && !title.includes(''Adobe Photoshop'') ? title.split('' @ '')[0]
+    : null'
+  action: doc
+  group: Design
+- name: Figma File
+  matcher: 'bundleId === ''com.figma.Desktop'' && title && !title.includes(''Figma'') ? title.split('' – '')[0] : null'
+  action: doc
+  group: Design
+- name: Sketch Document
+  matcher: 'bundleId === ''com.bohemiancoding.sketch3'' && title && !title.includes(''Sketch'') ? title : null'
+  action: doc
+  group: Design
+- name: Activity Monitor Process
+  matcher: 'bundleId === ''com.apple.ActivityMonitor'' && title && title !== ''Activity Monitor'' ? title : null'
+  action: app
+  group: System
+- name: Console Log
+  matcher: 'bundleId === ''com.apple.Console'' && title && title !== ''Console'' ? title : null'
+  action: app
+  group: System
+- name: System Preferences
+  matcher: 'bundleId === ''com.apple.systempreferences'' && title && title !== ''System Preferences'' ? title : null'
+  action: app
+  group: System
+- name: Test Command
+  matcher: 'false'
+  action: cmd
+  group: Test
+# - name: Application Launcher
+#   matcher: 'app && app.length > 0 ? app : null'
+#   action: app
+#   group: Apps
+
+
+
+  # =================================================================
+  # TEST ACTIONS - For testing the unified actions system
+  # =================================================================
+  
+  test_url:
+    action_type: open_url
+    description: "Test opening URL"
+    url: "https://github.com"
+    
+  test_folder:
+    action_type: open_folder
+    description: "Test opening folder"
+    path: "/tmp"
+    
+  test_template:
+    action_type: template
+    description: "Test template action"
+    name: "Test {{input}}"
+    action: "test"
+    arg: "/tmp/test_{{input}}.txt"
+    patch: "Test"
+    contents: |
+      Test file for {{input}}
+      Created at {{date.year}}-{{date.month}}-{{date.day}}
+  
+  # Example: Text action with custom delay
+  # You can create custom text actions with specific delays
+  text_slow:
+    action_type: text
+    description: "Type text with 2 second delay"
+    delay: 2.0  # Wait 2 seconds before typing
+  
+  text_fast:
+    action_type: text
+    description: "Type text with 0.5 second delay"
+    delay: 0.5  # Wait only 0.5 seconds before typing
+  
