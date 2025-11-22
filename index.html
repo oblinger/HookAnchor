@@ -37,23 +37,14 @@
         }
 
         .column {
-            background: white;
-            border-radius: 20px;
             padding: 40px 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .column:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
         }
 
         .column-title {
             font-size: 48px;
             font-weight: bold;
-            color: #667eea;
+            color: white;
             margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -62,7 +53,7 @@
         .column-subtitle {
             font-size: 20px;
             font-weight: bold;
-            color: #764ba2;
+            color: rgba(255, 255, 255, 0.9);
             margin-bottom: 30px;
             font-style: italic;
         }
@@ -71,7 +62,7 @@
             width: 150px;
             height: 150px;
             margin: 30px auto;
-            background: #f0f0f0;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             display: flex;
             align-items: center;
@@ -87,7 +78,7 @@
         .column-text {
             font-size: 16px;
             line-height: 1.6;
-            color: #333;
+            color: white;
             text-align: left;
         }
 
@@ -125,11 +116,8 @@
 
         /* Video section */
         .video-section {
-            background: white;
-            border-radius: 20px;
             padding: 30px;
             margin-top: 50px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             gap: 30px;
@@ -143,18 +131,7 @@
         .video-title {
             font-size: 28px;
             font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .video-duration {
-            display: inline-block;
-            background: #667eea;
             color: white;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 13px;
-            font-weight: bold;
         }
 
         .video-thumbnail-container {
@@ -176,28 +153,25 @@
         }
 
         .beta-notice {
-            background: white;
-            border-radius: 20px;
             padding: 30px;
             margin-top: 50px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         .beta-notice p {
             font-size: 16px;
-            color: #666;
+            color: white;
             margin: 0;
         }
 
         .beta-notice a {
-            color: #667eea;
-            text-decoration: none;
+            color: white;
+            text-decoration: underline;
             font-weight: bold;
         }
 
         .beta-notice a:hover {
-            text-decoration: underline;
+            text-decoration: none;
         }
 
         .play-button-overlay {
@@ -312,7 +286,6 @@
             </a>
             <div class="video-content">
                 <div class="video-title">HookAnchor in Action</div>
-                <div class="video-duration">2-minute teaser</div>
             </div>
         </div>
 
