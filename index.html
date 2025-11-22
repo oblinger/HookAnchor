@@ -123,6 +123,88 @@
             font-weight: normal;
         }
 
+        /* Video section */
+        .video-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 50px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .video-subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .video-duration {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .video-thumbnail-container {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .video-thumbnail-container:hover {
+            transform: scale(1.02);
+        }
+
+        .video-thumbnail {
+            max-width: 100%;
+            width: 800px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .play-button-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(102, 126, 234, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .video-thumbnail-container:hover .play-button-overlay {
+            background: rgba(102, 126, 234, 1);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .play-button-overlay::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 25px solid white;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            margin-left: 5px;
+        }
+
         @media (max-width: 968px) {
             .columns {
                 grid-template-columns: 1fr;
@@ -131,6 +213,10 @@
 
             .main-title {
                 font-size: 28px;
+            }
+
+            .video-thumbnail {
+                width: 100%;
             }
         }
     </style>
@@ -179,6 +265,19 @@
                     Building repeated patterns and templates for common kinds of information simplifies capture and, more importantly, helps you know how to find them weeks or years later. Expressing distinct kinds of knowledge as a templated stream allows targeted searching by name over a vastly reduced number of pages. (e.g., a person I met 3-6 months ago, one of my work projects last year, a book I read 3 years ago are very narrow searches, but only if these are expressed as separated streams)
                 </div>
             </div>
+        </div>
+
+        <!-- Video Section -->
+        <div class="video-section">
+            <div class="video-title">See HookAnchor in Action</div>
+            <div class="video-duration">2-minute demo</div>
+            <div class="video-subtitle">Watch how HookAnchor brings it all together</div>
+            <a href="website/hook_anchor_teaser.mp4" target="_blank">
+                <div class="video-thumbnail-container">
+                    <img src="website/video_thumbnail.jpg" alt="HookAnchor Demo" class="video-thumbnail">
+                    <div class="play-button-overlay"></div>
+                </div>
+            </a>
         </div>
     </div>
 </body>
