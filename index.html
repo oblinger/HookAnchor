@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hook Anchor - Three Principles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@700&family=Lora:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin: 0 auto;
+        }
+
+        .column {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .column:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .column-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .column-subtitle {
+            font-size: 20px;
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .column-image {
+            width: 150px;
+            height: 150px;
+            margin: 30px auto;
+            background: #f0f0f0;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .column-image img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 15px;
+        }
+
+        .column-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            text-align: left;
+        }
+
+        .main-title {
+            font-family: 'Lora', serif;
+            font-size: 56px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            margin-bottom: 50px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.4;
+        }
+
+        .main-title em {
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        .sub-title {
+            font-family: 'Lora', serif;
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            margin-bottom: 50px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.4;
+        }
+
+        .sub-title em {
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        @media (max-width: 968px) {
+            .columns {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .main-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">Knowledge Management<br>
+            <div class="sub-title">that works <em>with</em> your existing tools</div></h1>
+        <div class="columns">
+            <!-- First Column: HOOK -->
+            <div class="column">
+                <div class="column-title">HOOK</div>
+                <div class="column-image">
+                    <img src="Hook.png" alt="Hook">
+                </div>
+                <div class="column-subtitle">Own your names!</div>
+                <div class="column-text">
+                    99% of the time you are accessing the same 0.01% of your content.  Seconds per day are enough to maintain <em>direct</em> "hook" names to this .01% wherever it lives.
+                    <!-- Don't waste time and mental energy wading through tens of thousands of files when accessing your active docs, instead spend seconds per day ensuring you have direct hook names for the hundreds you are actively accessing right now. -->
+                    <!-- While you have access to tens of thousands of docs, only a sliver of a percent are actively accessed over time, and that active set shifts slowly month to month.
+                    <br><br>
+                    Instead of wasting time and mental energy wading through these each time you access anything, you can spend just a few seconds per day ensuring your active hundred or thousand docs or folders have short, direct names. -->
+                </div>
+            </div>
+
+            <!-- Second Column: ANCHOR -->
+            <div class="column">
+                <div class="column-title">ANCHOR</div>
+                <div class="column-image">
+                    <img src="Anchor.png" alt="Anchor">
+                </div>
+                <div class="column-subtitle">Anchor your stuff!</div>
+                <div class="column-text">
+                    Global taxonomies are impossible to maintain. Organizing your docs by named anchors that logically span all of your content, regardless of app or location, on or offline, eases the burden of memorizing where each document is. Limiting the number of anchors created per month ensures you can document, correctly link, and remember each anchor for years without effort.
+                </div>
+            </div>
+
+            <!-- Third Column: STREAM -->
+            <div class="column">
+                <div class="column-title">STREAM</div>
+                <div class="column-image">
+                    <img src="Stream.png" alt="Stream">
+                </div>
+                <div class="column-subtitle">Standardize and stream!</div>
+                <div class="column-text">
+                    Building repeated patterns and templates for common kinds of information simplifies capture and, more importantly, helps you know how to find them weeks or years later. Expressing distinct kinds of knowledge as a templated stream allows targeted searching by name over a vastly reduced number of pages. (e.g., a person I met 3-6 months ago, one of my work projects last year, a book I read 3 years ago are very narrow searches, but only if these are expressed as separated streams)
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
