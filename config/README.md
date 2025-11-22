@@ -4,7 +4,7 @@ This directory contains default configuration files for HookAnchor.
 
 ## Installation
 
-1. Install HookAnchor from the DMG distribution
+1. Install Hook Anchor from the DMG distribution
 2. The installer will create `~/.config/hookanchor/` with these defaults
 3. Customize the configuration files for your workflow
 
@@ -44,13 +44,9 @@ integrations:
     api_key: "${HOOKANCHOR_NOTION_API_KEY}"  # Reads from environment
 ```
 
-## Historical Versions
-
-See [../versions/](../versions/) for configuration files from previous releases.
-
 ## Documentation
 
-See the [docs/](../docs/) directory for complete documentation:
+See [../docs/](../docs/) for complete documentation:
 - [User Guide](../docs/USER_GUIDE.md)
 - [Configuration Reference](../docs/CONFIG_REFERENCE.md)
 - [Templates and Scripting](../docs/TEMPLATES_AND_SCRIPTING.md)
