@@ -466,6 +466,44 @@ module.exports = {
     }
   },
 
+  // Edit file with text editor
+  action_edit: function(ctx) {
+    const { log, shell, shellSync, expandHome } = ctx.builtins;
+    const filePath = expandHome(ctx.arg);
+
+    log("EDIT", `Opening file in editor: ${filePath}`);
+
+    // Check for EDITOR environment variable using shell
+    let editor = "";
+    try {
+      const editorOutput = shellSync("echo $EDITOR");
+      // shellSync wraps output with "Command executed: " prefix, strip it
+      let cleanOutput = editorOutput.trim();
+      if (cleanOutput.startsWith("Command executed: ")) {
+        cleanOutput = cleanOutput.substring("Command executed: ".length).trim();
+      }
+      editor = cleanOutput;
+    } catch (e) {
+      log("EDIT", `Could not read EDITOR variable: ${e}`);
+    }
+
+    let editorCmd;
+    if (editor && editor.length > 0) {
+      // Use user's preferred editor
+      editorCmd = `${editor} "${filePath}"`;
+      log("EDIT", `Using EDITOR environment variable: ${editor}`);
+    } else {
+      // Fall back to macOS default text editor via 'open -t'
+      editorCmd = `open -t "${filePath}"`;
+      log("EDIT", `No EDITOR set, using macOS default text editor`);
+    }
+
+    log("EDIT", `Executing: ${editorCmd}`);
+    shell(editorCmd);
+
+    return `Opened in editor: ${filePath}`;
+  },
+
   // Search for contact in Contacts app
   action_contact: function(ctx) {
     const { log, shell, shellSync, shellWithExitCode } = ctx.builtins;

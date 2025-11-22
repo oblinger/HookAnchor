@@ -1,5 +1,7 @@
 
-# **→ [See the HookAnchor landing page](https://oblinger.github.io/HookAnchor/) ←**
+# <center>→ [See the HookAnchor landing page](https://oblinger.github.io/HookAnchor/) ←</center>
+
+<br><br>
 
 ## Hook Anchor
 

@@ -52,7 +52,7 @@ popup_settings:
     - "**/CLAUDE.md"                   # Exclude all CLAUDE.md files
     - "**/README.md"                   # Exclude all README.md files
   listed_actions: >
-    alias,app,console,doc,folder,insert,markdown,text,tmux,
+    alias,app,console,doc,edit,folder,insert,markdown,text,tmux,
     1pass,contact,notion,obs_url,slack,
     url,brave,chrome,firefox,safari,work
   
