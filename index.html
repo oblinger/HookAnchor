@@ -127,50 +127,50 @@
         .video-section {
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 30px;
             margin-top: 50px;
-            text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .video-content {
+            flex: 1;
+            text-align: left;
         }
 
         .video-title {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: bold;
             color: #667eea;
             margin-bottom: 10px;
-        }
-
-        .video-subtitle {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 30px;
         }
 
         .video-duration {
             display: inline-block;
             background: #667eea;
             color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 14px;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 13px;
             font-weight: bold;
-            margin-bottom: 20px;
         }
 
         .video-thumbnail-container {
             position: relative;
-            display: inline-block;
+            display: block;
             cursor: pointer;
             transition: transform 0.3s ease;
+            flex-shrink: 0;
         }
 
         .video-thumbnail-container:hover {
-            transform: scale(1.02);
+            transform: scale(1.05);
         }
 
         .video-thumbnail {
-            max-width: 100%;
-            width: 800px;
+            width: 300px;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
@@ -240,8 +240,18 @@
                 font-size: 28px;
             }
 
+            .video-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .video-content {
+                text-align: center;
+            }
+
             .video-thumbnail {
                 width: 100%;
+                max-width: 400px;
             }
         }
     </style>
@@ -294,15 +304,16 @@
 
         <!-- Video Section -->
         <div class="video-section">
-            <div class="video-title">See HookAnchor in Action</div>
-            <div class="video-duration">2-minute demo</div>
-            <div class="video-subtitle">Watch how HookAnchor brings it all together</div>
             <a href="website/hook_anchor_teaser.mp4" target="_blank">
                 <div class="video-thumbnail-container">
                     <img src="website/video_thumbnail.jpg" alt="HookAnchor Demo" class="video-thumbnail">
                     <div class="play-button-overlay"></div>
                 </div>
             </a>
+            <div class="video-content">
+                <div class="video-title">HookAnchor in Action</div>
+                <div class="video-duration">2-minute teaser</div>
+            </div>
         </div>
 
         <!-- Beta Notice -->
