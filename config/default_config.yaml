@@ -24,7 +24,6 @@ popup_settings:
   max_columns:            4            # Max columns in list of matching commands
   max_characters:         30           # Maximum characters for command names before truncation
   word_separators:        " ._-!"      # Word separator chars for submenus and command merging
-  scan_interval_seconds:  600          # How many seconds between automatic rescanning of the filesystem
   idle_timeout_seconds:   60           # Hide popup after this many seconds of inactivity
   countdown_seconds:      5            # Seconds for grabber countdown (default: 5)
   anchor_timeout_seconds: 3600         # Seconds to remember last executed anchor
@@ -35,22 +34,6 @@ popup_settings:
   max_window_size:        "1700x1100"  # Maximum size for dialogs and popups in "widthxheight" format
   default_window_size:    "600x120"    # Default popup window size in "widthxheight" format
   max_log_file_size:      10000000     # Maximum log file size in bytes (10MB) before clearing
-  file_roots:             ["~/Documents/Notes", "/Applications"] # List of file scanning roots (markdown files and apps)
-  doc_file_extensions:    "pdf,doc,docx,xls,xlsx,ppt,pptx,txt,rtf,pages,numbers,csv,html,htm" # File extensions to auto-create DOC commands for
-  display_file_extensions: "pdf,doc,docx,xls,xlsx,ppt,pptx,txt,rtf,pages,numbers,csv,html,htm,md" # File extensions to display in prefix menu file lists
-
-  skip_patterns:                       # Standard glob patterns to skip during scanning
-    - "**/.*/**"                       # Exclude all hidden folders (starting with dot)
-    - "**/Yore/**"                     # Exclude any path containing /Yore/ folder (historical files)
-    - "**/*backups*/**"                # Exclude all backup directories and their contents
-    - "~/Documents/Notes/_temp_links/**"        # Exclude temporary symlink directory tree
-    - "~/Documents/Notes/prj/binproj/Hook Anchor/code/config/commands.txt"
-    - "~/Documents/Notes/T/Career/NJ/AI Job Search/outputs/**"  # Exclude AI job search output directory tree
-    - "**/_history/**"                 # Exclude all _history directories
-    - "**/capture_*.xlsx"              # Exclude capture Excel files anywhere
-    - "**/~$*.xlsx"                    # Exclude Excel temporary files anywhere
-    - "**/CLAUDE.md"                   # Exclude all CLAUDE.md files
-    - "**/README.md"                   # Exclude all README.md files
   listed_actions: >
     alias,app,console,doc,edit,folder,insert,markdown,text,tmux,
     1pass,contact,notion,obs_url,slack,
@@ -93,6 +76,62 @@ launcher_settings:
   obsidian_vault_path:    "~/Documents/Notes"   # Location of the main vault
   use_javascript_tmux_activation: "true"   # Use JavaScript TMUX implementation
   tmux_startup_command:   "claude --continue --dangerously-skip-permissions"  # Command to run in tmux session after activation
+
+
+# =================================================================
+# SCANNER SETTINGS - File discovery and scanning
+# =================================================================
+scanner_settings:
+  scan_interval_seconds:  600          # How many seconds between automatic rescanning of the filesystem
+  file_roots:             ["~/Documents/Notes", "/Applications"] # Directories to scan for markdown files and apps
+  doc_file_extensions:    "pdf,doc,docx,xls,xlsx,ppt,pptx,txt,rtf,pages,numbers,csv,html,htm"
+  display_file_extensions: "pdf,doc,docx,xls,xlsx,ppt,pptx,txt,rtf,pages,numbers,csv,html,htm,md"
+  skip_patterns:
+    - "**/.*/**"                       # Exclude all hidden folders (starting with dot)
+    - "**/Yore/**"                     # Exclude any path containing /Yore/ folder (historical files)
+    - "**/*backups*/**"                # Exclude all backup directories and their contents
+    - "~/Documents/Notes/_temp_links/**"
+    - "~/Documents/Notes/prj/binproj/Hook Anchor/code/config/commands.txt"
+    - "~/Documents/Notes/T/Career/NJ/AI Job Search/outputs/**"
+    - "**/_history/**"
+    - "**/capture_*.xlsx"
+    - "**/~$*.xlsx"
+    - "**/CLAUDE.md"
+    - "**/README.md"
+  anchor_tree_root:       "~/ob/anchors"
+  delete_broken_aliases:  true
+
+
+# =================================================================
+# ANCHOR FILE SETTINGS - Electric Anchor processing
+# =================================================================
+anchor_file:
+  max_characters:         5000         # Max characters to scan for indicators in anchor file top section
+  page_width:             120          # Target line width for block-form "Other links:" wrapping
+  line_width_tolerance:   20           # Characters of slack before reflowing (reduces git diff noise)
+  redirect_indicator:     "\\A(\\s*\\n)*\\[\\[([^\\]]+)\\]\\]"
+  prefer_wiki_links:      true         # Prefer [[wiki links]] over hook:// URLs when possible
+  yaml_desc_field:        "desc"       # YAML front matter field name for descriptions
+  create_front_matter:    true         # Create YAML front matter if missing when syncing descriptions
+
+# =================================================================
+# ACTION TRIGGERS - Regex patterns for anchor file section detection
+# =================================================================
+action_triggers:
+  - type: breadcrumb
+    trigger: "^:>>"
+  - type: link_block
+    trigger: "^Other links:"
+  - type: link_list
+    trigger: "^\\.\\s__\\s\\."
+    item: "- [[{command}]] - {description}"
+  - type: link_list
+    trigger: "^\\|\\s*\\.\\s__\\s\\.\\s*\\|.*\\n\\|[-|\\s]+\\|"
+    item: "| [[{command}]] | {description} |"
+  - type: broken_links
+    trigger: "^Broken links:"
+  - type: terminator
+    trigger: "^\\s*\\n\\s*\\n\\s*\\n"
 
 
 # =================================================================
