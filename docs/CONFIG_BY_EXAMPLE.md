@@ -71,7 +71,7 @@ The short `idle_timeout_seconds` means the popup disappears quickly if you get d
 
 ### 1-4 Custom Editor Actions
 
-When you edit a command in the popup, a dropdown shows the available action types. The `listed_actions` field controls which types appear in that dropdown. Build a list with all the types you actually use (see [Action Types](PROGRAMMERS_REFERENCE.md#4-action-types) for a complete list of built-in and JavaScript action types):
+When you edit a command in the popup, a dropdown shows the available action types. The `listed_actions` field controls which types appear in that dropdown. Build a list with all the types you actually use (see [Action Types](PROGRAMMERS_REFERENCE.md#2-action-types) for a complete list of built-in and JavaScript action types):
 
 ```yaml
 popup_settings:

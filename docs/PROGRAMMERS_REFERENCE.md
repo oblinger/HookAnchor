@@ -1,6 +1,6 @@
 # Programmer's Reference
 
-Advanced configuration guide for extending HookAnchor with scripting. Covers the template variable system, JavaScript built-in functions, custom action authoring, and grabber rule writing.
+Advanced configuration guide for extending HookAnchor with scripting. Covers the template variable system, action type catalog, JavaScript built-in functions, custom action authoring, and grabber rule writing.
 
 For config field definitions, see [CONFIG_REFERENCE.md](CONFIG_REFERENCE.md). For practical examples, see [CONFIG_BY_EXAMPLE.md](CONFIG_BY_EXAMPLE.md).
 
@@ -10,17 +10,17 @@ For config field definitions, see [CONFIG_REFERENCE.md](CONFIG_REFERENCE.md). Fo
 
 **Part I — [Scripting in config.yaml](#part-i--scripting-in-configyaml)**
 
-All JavaScript shown in Part I can be used directly inside `config.yaml` fields (within `{{...}}` template expressions) and is also available inside `config.js` functions.
+Template expressions and the action type catalog — everything you configure directly in `config.yaml`.
 
 1. [Template Variables and Expressions](#1-template-variables-and-expressions)
-2. [JavaScript Built-in Functions](#2-javascript-built-in-functions)
-3. [The ctx Object (config.js)](#3-the-ctx-object-configjs)
-4. [Action Types](#4-action-types)
+2. [Action Types](#2-action-types)
 
 **Part II — [Extending HookAnchor via config.js](#part-ii--extending-hookanchor-via-configjs)**
 
-Custom behavior is authored in `~/.config/hookanchor/config.js`. This section covers writing new action types, grabber rules, and cloud integrations.
+Custom behavior authored in `~/.config/hookanchor/config.js` — the ctx object, built-in function library, custom actions, grabber rules, and cloud integrations.
 
+3. [The ctx Object](#3-the-ctx-object)
+4. [Built-in Functions](#4-built-in-functions)
 5. [Writing Custom Actions](#5-writing-custom-actions)
 6. [Writing Grabber Rules](#6-writing-grabber-rules)
 7. [Cloud Scan Roots](#7-cloud-scan-roots)
@@ -29,7 +29,7 @@ Custom behavior is authored in `~/.config/hookanchor/config.js`. This section co
 
 # Part I — Scripting in config.yaml
 
-The JavaScript features in this section are available anywhere HookAnchor evaluates expressions — inside `{{...}}` template fields in `config.yaml`, inline `js:` expressions, and `config.js` functions. You do not need to write a separate script file to use any of this.
+Template fields in `config.yaml` use `{{...}}` expressions with full JavaScript evaluation. This section covers the available variables and the catalog of action types you can reference.
 
 ## 1 Template Variables and Expressions
 
@@ -199,9 +199,123 @@ If you have templates using the old `{{YYYY}}` style variables, update them:
 
 ---
 
-## 2 JavaScript Built-in Functions
+## 2 Action Types
 
-These functions are available in JavaScript actions (both `config.js` functions and inline JS in config.yaml).
+Actions define behaviors triggered by keyboard shortcuts, popup commands, or other actions. There are two categories.
+
+### Built-in Action Types (Rust)
+
+These are handled natively by the launcher:
+
+| Type | Argument | Description |
+|------|----------|-------------|
+| `noop` | — | No operation |
+| `template` | *(template fields)* | Create commands from templates |
+| `popup` | `popup_action` | Control popup: `show`, `hide`, `toggle`, `next_page`, etc. |
+| `open_url` | URL | Open URL in browser (use `browser` param for specific browser) |
+| `app` | app name | Launch or activate application |
+| `open_folder` | path | Open folder in Finder |
+| `open_file` | path | Open file with default application |
+| `shell` | command | Execute shell command |
+| `obsidian` | file path | Open in Obsidian |
+| `alias` | command name | Execute another command by name |
+| `grab` | — | Trigger the grabber |
+| `watcher` | — | Trigger file watcher |
+
+### JavaScript Action Types (config.js)
+
+Any action type not in the built-in list is dispatched to `config.js` by looking for a function named `action_<type>`. For example, action type `markdown` calls `action_markdown(ctx)`.
+
+Standard JavaScript action types shipped with the default config:
+
+| Type | Description |
+|------|-------------|
+| `markdown` | Open markdown file (in Obsidian if in vault, else default app) |
+| `folder` | Open folder (resolves relative paths against vault root) |
+| `cmd` | Execute shell command (supports `W` flag for Terminal window) |
+| `console` | Execute with terminal modes: background (no flags), interactive (`I`), auto-close (`C`) |
+| `doc` | Open document with default application |
+| `text` | Type text via keyboard simulation (reads from file) |
+| `insert` | Type text directly from argument |
+| `contact` | Search and open in Contacts app |
+| `slack` | Navigate to Slack channel |
+| `1pass` | Open 1Password Quick Access with search term |
+| `notion` | Open Notion page |
+| `chrome` | Open URL in Chrome |
+| `work` | Open URL in Chrome Beta |
+| `anchor` | Smart dispatch: infers action type from argument (URL → browser, `.md` → markdown, directory → folder) and saves last anchor |
+| `activate_tmux` | Create/attach tmux session for a project folder |
+| `edit` | Open file in `$EDITOR` or default text editor |
+| `rescan` | Trigger command database rescan |
+| `wrap` | Wrap a file into a same-named folder and add `A` flag |
+| `grab` | Perform grab operation via CLI |
+| `clear_log` | Truncate `anchor.log` |
+
+### How Commands Reference Actions
+
+Commands in `commands.txt` have an action field that names the action type:
+
+```
+CommandName  action_type  /path/or/argument  GroupName  Flags
+```
+
+When a command is executed, HookAnchor looks up the action type, first checking built-in types, then falling back to `config.js`.
+
+---
+
+# Part II — Extending HookAnchor via config.js
+
+Custom actions, grabber rules, and cloud integrations are authored in `~/.config/hookanchor/config.js`. Functions in this file receive a `ctx` object and have access to all built-in functions through `ctx.builtins`.
+
+## 3 The ctx Object
+
+Actions defined in `config.js` receive a `ctx` object with full command context.
+
+### ctx Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `ctx.arg` | `string` | Primary argument (file path, URL, etc.) |
+| `ctx.input` | `string` | User's search input |
+| `ctx.command_name` | `string` | Name of the command being executed |
+| `ctx.flags` | `string` | Command flags (e.g., `"A"`, `"IC"`) |
+| `ctx.params` | `object` | Action parameters from config (e.g., `delay`, `direct`, `browser`) |
+| `ctx.selected` | `object` | Currently selected command — `{name, arg, action, patch, flags, folder}` |
+| `ctx.previous` | `object` | Previously executed command — `{name, folder, patch}` |
+| `ctx.grabbed` | `object` | Grabber capture — `{action, arg}` |
+| `ctx.date` | `object` | Date components — `{YYYY, MM, DD}` |
+| `ctx.last_anchor_input` | `string` | Last anchor input text |
+| `ctx.builtins` | `object` | All built-in functions (see [§ 4](#4-built-in-functions)) |
+
+### Accessing Builtins
+
+In `config.js`, built-in functions are accessed through `ctx.builtins`:
+
+```javascript
+action_example: function(ctx) {
+    const { log, shell, expandHome, fileExists } = ctx.builtins;
+
+    log("EXAMPLE", `Processing: ${ctx.arg}`);
+    const path = expandHome(ctx.arg);
+
+    if (fileExists(path)) {
+        shell(`open "${path}"`);
+    }
+}
+```
+
+### Return Values
+
+- Return a string for status messages
+- Return `{ exit: true }` to close the popup after execution
+- Return nothing (or `undefined`) for no-op
+- Throw an error to trigger the error dialog
+
+---
+
+## 4 Built-in Functions
+
+These functions are available through `ctx.builtins` in `config.js` actions.
 
 ### Logging
 
@@ -303,120 +417,6 @@ These functions are available in JavaScript actions (both `config.js` functions 
 | `start_claude_code()` | — | Start Claude Code in current directory |
 
 ---
-
-## 3 The ctx Object (config.js)
-
-Actions defined in `~/.config/hookanchor/config.js` receive a `ctx` object with full command context. This is richer than the template variable system.
-
-### ctx Properties
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `ctx.arg` | `string` | Primary argument (file path, URL, etc.) |
-| `ctx.input` | `string` | User's search input |
-| `ctx.command_name` | `string` | Name of the command being executed |
-| `ctx.flags` | `string` | Command flags (e.g., `"A"`, `"IC"`) |
-| `ctx.params` | `object` | Action parameters from config (e.g., `delay`, `direct`, `browser`) |
-| `ctx.selected` | `object` | Currently selected command — `{name, arg, action, patch, flags, folder}` |
-| `ctx.previous` | `object` | Previously executed command — `{name, folder, patch}` |
-| `ctx.grabbed` | `object` | Grabber capture — `{action, arg}` |
-| `ctx.date` | `object` | Date components — `{YYYY, MM, DD}` |
-| `ctx.last_anchor_input` | `string` | Last anchor input text |
-| `ctx.builtins` | `object` | All built-in functions (see § 2) |
-
-### Accessing Builtins
-
-In `config.js`, built-in functions are accessed through `ctx.builtins`:
-
-```javascript
-action_example: function(ctx) {
-    const { log, shell, expandHome, fileExists } = ctx.builtins;
-
-    log("EXAMPLE", `Processing: ${ctx.arg}`);
-    const path = expandHome(ctx.arg);
-
-    if (fileExists(path)) {
-        shell(`open "${path}"`);
-    }
-}
-```
-
-### Return Values
-
-- Return a string for status messages
-- Return `{ exit: true }` to close the popup after execution
-- Return nothing (or `undefined`) for no-op
-- Throw an error to trigger the error dialog
-
----
-
-## 4 Action Types
-
-Actions define behaviors triggered by keyboard shortcuts, popup commands, or other actions. There are two categories.
-
-### Built-in Action Types (Rust)
-
-These are handled natively by the launcher:
-
-| Type | Argument | Description |
-|------|----------|-------------|
-| `noop` | — | No operation |
-| `template` | *(template fields)* | Create commands from templates |
-| `popup` | `popup_action` | Control popup: `show`, `hide`, `toggle`, `next_page`, etc. |
-| `open_url` | URL | Open URL in browser (use `browser` param for specific browser) |
-| `app` | app name | Launch or activate application |
-| `open_folder` | path | Open folder in Finder |
-| `open_file` | path | Open file with default application |
-| `shell` | command | Execute shell command |
-| `obsidian` | file path | Open in Obsidian |
-| `alias` | command name | Execute another command by name |
-| `grab` | — | Trigger the grabber |
-| `watcher` | — | Trigger file watcher |
-
-### JavaScript Action Types (config.js)
-
-Any action type not in the built-in list is dispatched to `config.js` by looking for a function named `action_<type>`. For example, action type `markdown` calls `action_markdown(ctx)`.
-
-Standard JavaScript action types shipped with the default config:
-
-| Type | Description |
-|------|-------------|
-| `markdown` | Open markdown file (in Obsidian if in vault, else default app) |
-| `folder` | Open folder (resolves relative paths against vault root) |
-| `cmd` | Execute shell command (supports `W` flag for Terminal window) |
-| `console` | Execute with terminal modes: background (no flags), interactive (`I`), auto-close (`C`) |
-| `doc` | Open document with default application |
-| `text` | Type text via keyboard simulation (reads from file) |
-| `insert` | Type text directly from argument |
-| `contact` | Search and open in Contacts app |
-| `slack` | Navigate to Slack channel |
-| `1pass` | Open 1Password Quick Access with search term |
-| `notion` | Open Notion page |
-| `chrome` | Open URL in Chrome |
-| `work` | Open URL in Chrome Beta |
-| `anchor` | Smart dispatch: infers action type from argument (URL → browser, `.md` → markdown, directory → folder) and saves last anchor |
-| `activate_tmux` | Create/attach tmux session for a project folder |
-| `edit` | Open file in `$EDITOR` or default text editor |
-| `rescan` | Trigger command database rescan |
-| `wrap` | Wrap a file into a same-named folder and add `A` flag |
-| `grab` | Perform grab operation via CLI |
-| `clear_log` | Truncate `anchor.log` |
-
-### How Commands Reference Actions
-
-Commands in `commands.txt` have an action field that names the action type:
-
-```
-CommandName  action_type  /path/or/argument  GroupName  Flags
-```
-
-When a command is executed, HookAnchor looks up the action type, first checking built-in types, then falling back to `config.js`.
-
----
-
-# Part II — Extending HookAnchor via config.js
-
-Custom actions, grabber rules, and cloud integrations are authored in `~/.config/hookanchor/config.js`. Functions in this file receive a `ctx` object (described in [§ 3](#3-the-ctx-object-configjs)) and have access to all built-in functions (described in [§ 2](#2-javascript-built-in-functions)) through `ctx.builtins`.
 
 ## 5 Writing Custom Actions
 
