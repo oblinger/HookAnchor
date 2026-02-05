@@ -328,20 +328,46 @@ Each action has a name (the YAML key) and a set of fields. Actions are stored in
 
 #### Action Types
 
-| Type | Behavior |
-|------|----------|
-| `template` | Create new commands and files via operations |
-| `popup` | Control the popup UI (navigate, toggle, etc.) |
-| `open_url` | Open a URL in a browser |
-| `app` | Launch an application |
-| `open_folder` | Open a folder in Finder |
-| `open_file` | Open a file with default application |
-| `shell` | Execute a shell command |
-| `obsidian` | Open a file in Obsidian |
-| `alias` | Resolve and execute another command |
-| `grab` | Capture active window context |
-| `watcher` | Send command to file watcher |
-| *(other)* | Calls JavaScript function `action_{type}()` from config.js |
+Every command has an action type that determines what happens when it runs. Types marked **JS** are implemented in `config.js` and can be customized (see [Programmer's Reference § 2](PROGRAMMERS_REFERENCE.md#2-action-types)). Any unrecognized type dispatches to `config.js` as `action_<type>()`.
+
+| Type | JS | Description |
+|------|----|-------------|
+| `1pass` | ✓ | Open 1Password Quick Access with search term |
+| `alias` | | Execute another command by name |
+| `anchor` | ✓ | Smart dispatch: infers type from argument and saves last anchor |
+| `app` | | Launch or activate application |
+| `chrome` | ✓ | Open URL in Chrome |
+| `cmd` | ✓ | Execute shell command (`W` flag for Terminal window) |
+| `console` | ✓ | Terminal modes: background, interactive (`I`), auto-close (`C`) |
+| `contact` | ✓ | Search and open in Contacts app |
+| `doc` | ✓ | Open document with default application |
+| `edit` | ✓ | Open file in `$EDITOR` or default text editor |
+| `folder` | ✓ | Open folder (resolves relative paths against vault root) |
+| `insert` | ✓ | Type text directly from argument |
+| `markdown` | ✓ | Open markdown file (Obsidian if in vault, else default app) |
+| `noop` | | No operation (virtual anchors) |
+| `notion` | ✓ | Open Notion page |
+| `obsidian` | | Open file in Obsidian |
+| `open_file` | | Open file with default application |
+| `open_folder` | | Open folder in Finder |
+| `open_url` | | Open URL in browser (`browser` param for specific browser) |
+| `popup` | | Control popup: show, hide, toggle, navigate, etc. |
+| `shell` | | Execute shell command |
+| `slack` | ✓ | Navigate to Slack channel |
+| `template` | | Create commands from templates |
+| `text` | ✓ | Type text via keyboard simulation (reads from file) |
+| `work` | ✓ | Open URL in Chrome Beta |
+
+**Config.yaml wrapper actions** — These are defined in the `actions:` section as wrappers around base types. You can modify or add your own:
+
+| Name | Base Type | Parameters |
+|------|-----------|------------|
+| `brave` | `open_url` | `browser: "Brave Browser"` |
+| `firefox` | `open_url` | `browser: "Firefox"` |
+| `obs_url` | `app` | `app: "Obsidian"` |
+| `safari` | `open_url` | `browser: "Safari"` |
+| `tmux` | `activate_tmux` | *(delegates to JS)* |
+| `url` | `open_url` | *(default browser)* |
 
 #### Template Action Fields
 

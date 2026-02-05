@@ -1,4 +1,15 @@
 {
   "target_path": "/Users/oblinger/ob/proj/Hook Anchor/Hook Anchor Website/HookAnchor/docs/user",
-  "files": {}
+  "files": {
+    ".sync-push-code.json": "2b9bcbe20a293e11e16f1f87ff7f3b6f462953259fa83dccfd8ed480d84e8d1e",
+    ".sync-push-website.json": "757135964df3558b7bc2ea9e9bc0d98ad79f18c5a2bbe53f11003df61439f7de",
+    "CONFIG_BY_EXAMPLE.md": "5bdfa444a0e28cabdbefab1d78788d327f082c3122ed06c6c3081871c1031797",
+    "CONFIG_REFERENCE.md": "50cb1cea1c47b078267b995f0147f6a1510e534ef718f702998e12e56e715faf",
+    "HA User.md": "73c2e4bbfc3f7278e06105d733409caf4ce6075f1497ac31bfb2bec53131f1b1",
+    "HookAnchor_Action_Types.md": "2f616cb2abadfcf8e9c5189bf9549f2df6f598fba10dc3d74deafbfff91de786",
+    "PROGRAMMERS_REFERENCE.md": "ad0d842f894ae505901d46bc0aadc357f853f56aab8a8c3749c4a8ca70d2577c",
+    "TEMPLATES_AND_SCRIPTING.md": "138508feef51838e167f9e12501280f8c459841440cb0cfd2596b458ccf6acd8",
+    "TEMPLATE_JS_VARIABLES.md": "fd92d020f9f3f523c20deda9d80e274c1583b4b833f078833698354497fab6ac",
+    "USER_GUIDE.md": "8c1ee5f18a89a603d46c19a862210e6fddd362fadcdefe9633401cd7a46b6cb0"
+  }
 }
