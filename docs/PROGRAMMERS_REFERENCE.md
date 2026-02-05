@@ -8,15 +8,28 @@ For config field definitions, see [CONFIG_REFERENCE.md](CONFIG_REFERENCE.md). Fo
 
 **Contents**
 
+**Part I — [Scripting in config.yaml](#part-i--scripting-in-configyaml)**
+
+All JavaScript shown in Part I can be used directly inside `config.yaml` fields (within `{{...}}` template expressions) and is also available inside `config.js` functions.
+
 1. [Template Variables and Expressions](#1-template-variables-and-expressions)
 2. [JavaScript Built-in Functions](#2-javascript-built-in-functions)
 3. [The ctx Object (config.js)](#3-the-ctx-object-configjs)
 4. [Action Types](#4-action-types)
+
+**Part II — [Extending HookAnchor via config.js](#part-ii--extending-hookanchor-via-configjs)**
+
+Custom behavior is authored in `~/.config/hookanchor/config.js`. This section covers writing new action types, grabber rules, and cloud integrations.
+
 5. [Writing Custom Actions](#5-writing-custom-actions)
 6. [Writing Grabber Rules](#6-writing-grabber-rules)
 7. [Cloud Scan Roots](#7-cloud-scan-roots)
 
 ---
+
+# Part I — Scripting in config.yaml
+
+The JavaScript features in this section are available anywhere HookAnchor evaluates expressions — inside `{{...}}` template fields in `config.yaml`, inline `js:` expressions, and `config.js` functions. You do not need to write a separate script file to use any of this.
 
 ## 1 Template Variables and Expressions
 
@@ -400,6 +413,10 @@ CommandName  action_type  /path/or/argument  GroupName  Flags
 When a command is executed, HookAnchor looks up the action type, first checking built-in types, then falling back to `config.js`.
 
 ---
+
+# Part II — Extending HookAnchor via config.js
+
+Custom actions, grabber rules, and cloud integrations are authored in `~/.config/hookanchor/config.js`. Functions in this file receive a `ctx` object (described in [§ 3](#3-the-ctx-object-configjs)) and have access to all built-in functions (described in [§ 2](#2-javascript-built-in-functions)) through `ctx.builtins`.
 
 ## 5 Writing Custom Actions
 
