@@ -1,18 +1,15 @@
 
 # <center>→ [See the HookAnchor landing page](https://oblinger.github.io/HookAnchor/) ←</center>
 
-<br><br>
-
-## Hook Anchor
-
-Knowledge management that works with your existing tools.
+<br>
+## Hook Anchor -- Knowledge management that works with your existing tools.
 
 ### Documentation
 
-- **[User Guide](docs/USER_GUIDE.md)** — Getting started, popup interface, command management
-- **[Configuration Reference](docs/CONFIG_REFERENCE.md)** — Complete config.yaml field reference
-- **[Configuration by Example](docs/CONFIG_BY_EXAMPLE.md)** — Practical examples and recipes
-- **[Programmer's Reference](docs/PROGRAMMERS_REFERENCE.md)** — Template variables, JavaScript API, custom actions, grabber rules
+- **[User Guide](docs/user/USER_GUIDE.md)** — Getting started, popup interface, command management
+- **[Configuration Reference](docs/user/CONFIG_REFERENCE.md)** — Complete config.yaml field reference
+- **[Configuration by Example](docs/user/CONFIG_BY_EXAMPLE.md)** — Practical examples and recipes
+- **[Programmer's Reference](docs/user/PROGRAMMERS_REFERENCE.md)** — Template variables, JavaScript API, custom actions, grabber rules
 
 ### About
 
@@ -26,7 +23,7 @@ HookAnchor is a knowledge management platform built on three core principles:
 
 This repository contains:
 - Default configuration files (`config/`)
-- User documentation (`docs/`)
+- User documentation (`docs/user/`)
 - Version history (`versions/`)
 
 ### Status
