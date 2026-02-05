@@ -201,55 +201,41 @@ If you have templates using the old `{{YYYY}}` style variables, update them:
 
 ## 2 Action Types
 
-Actions define behaviors triggered by keyboard shortcuts, popup commands, or other actions. There are two categories.
+Every command has an action type that determines what happens when it runs. The table below lists all available types. Types marked **JS** are implemented in `config.js` and can be customized or overridden (see [§ 5](#5-writing-custom-actions)). Any action type not recognized as built-in is dispatched to `config.js` by looking for a function named `action_<type>`.
 
-### Built-in Action Types (Rust)
-
-These are handled natively by the launcher:
-
-| Type | Argument | Description |
-|------|----------|-------------|
-| `noop` | — | No operation |
-| `template` | *(template fields)* | Create commands from templates |
-| `popup` | `popup_action` | Control popup: `show`, `hide`, `toggle`, `next_page`, etc. |
-| `open_url` | URL | Open URL in browser (use `browser` param for specific browser) |
-| `app` | app name | Launch or activate application |
-| `open_folder` | path | Open folder in Finder |
-| `open_file` | path | Open file with default application |
-| `shell` | command | Execute shell command |
-| `obsidian` | file path | Open in Obsidian |
-| `alias` | command name | Execute another command by name |
-| `grab` | — | Trigger the grabber |
-| `watcher` | — | Trigger file watcher |
-
-### JavaScript Action Types (config.js)
-
-Any action type not in the built-in list is dispatched to `config.js` by looking for a function named `action_<type>`. For example, action type `markdown` calls `action_markdown(ctx)`.
-
-Standard JavaScript action types shipped with the default config:
-
-| Type | Description |
-|------|-------------|
-| `markdown` | Open markdown file (in Obsidian if in vault, else default app) |
-| `folder` | Open folder (resolves relative paths against vault root) |
-| `cmd` | Execute shell command (supports `W` flag for Terminal window) |
-| `console` | Execute with terminal modes: background (no flags), interactive (`I`), auto-close (`C`) |
-| `doc` | Open document with default application |
-| `text` | Type text via keyboard simulation (reads from file) |
-| `insert` | Type text directly from argument |
-| `contact` | Search and open in Contacts app |
-| `slack` | Navigate to Slack channel |
-| `1pass` | Open 1Password Quick Access with search term |
-| `notion` | Open Notion page |
-| `chrome` | Open URL in Chrome |
-| `work` | Open URL in Chrome Beta |
-| `anchor` | Smart dispatch: infers action type from argument (URL → browser, `.md` → markdown, directory → folder) and saves last anchor |
-| `activate_tmux` | Create/attach tmux session for a project folder |
-| `edit` | Open file in `$EDITOR` or default text editor |
-| `rescan` | Trigger command database rescan |
-| `wrap` | Wrap a file into a same-named folder and add `A` flag |
-| `grab` | Perform grab operation via CLI |
-| `clear_log` | Truncate `anchor.log` |
+| Type | JS | Description |
+|------|----|-------------|
+| `1pass` | ✓ | Open 1Password Quick Access with search term |
+| `activate_tmux` | ✓ | Create/attach tmux session for a project folder |
+| `alias` | | Execute another command by name |
+| `anchor` | ✓ | Smart dispatch: infers type from argument (URL → browser, `.md` → markdown, directory → folder) and saves last anchor |
+| `app` | | Launch or activate application |
+| `chrome` | ✓ | Open URL in Chrome |
+| `clear_log` | ✓ | Truncate `anchor.log` |
+| `cmd` | ✓ | Execute shell command (supports `W` flag for Terminal window) |
+| `console` | ✓ | Execute with terminal modes: background (no flags), interactive (`I`), auto-close (`C`) |
+| `contact` | ✓ | Search and open in Contacts app |
+| `doc` | ✓ | Open document with default application |
+| `edit` | ✓ | Open file in `$EDITOR` or default text editor |
+| `folder` | ✓ | Open folder (resolves relative paths against vault root) |
+| `grab` | ✓ | Trigger the grabber |
+| `insert` | ✓ | Type text directly from argument |
+| `markdown` | ✓ | Open markdown file (in Obsidian if in vault, else default app) |
+| `noop` | | No operation |
+| `notion` | ✓ | Open Notion page |
+| `obsidian` | | Open file in Obsidian |
+| `open_file` | | Open file with default application |
+| `open_folder` | | Open folder in Finder |
+| `open_url` | | Open URL in browser (use `browser` param for specific browser) |
+| `popup` | | Control popup: `show`, `hide`, `toggle`, `next_page`, etc. |
+| `rescan` | ✓ | Trigger command database rescan |
+| `shell` | | Execute shell command |
+| `slack` | ✓ | Navigate to Slack channel |
+| `template` | | Create commands from templates |
+| `text` | ✓ | Type text via keyboard simulation (reads from file) |
+| `watcher` | | Trigger file watcher |
+| `work` | ✓ | Open URL in Chrome Beta |
+| `wrap` | ✓ | Wrap a file into a same-named folder and add `A` flag |
 
 ### How Commands Reference Actions
 
@@ -259,7 +245,7 @@ Commands in `commands.txt` have an action field that names the action type:
 CommandName  action_type  /path/or/argument  GroupName  Flags
 ```
 
-When a command is executed, HookAnchor looks up the action type, first checking built-in types, then falling back to `config.js`.
+When a command is executed, HookAnchor checks the action type against built-in types first, then dispatches to `config.js`.
 
 ---
 
