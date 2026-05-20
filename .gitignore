@@ -1,0 +1,6 @@
+# macOS metadata
+.DS_Store
+
+# Vault-path sync metadata (leaks absolute /Users/... paths)
+# These files are dev-machine config; do not commit.
+**/.sync-push-*.json
